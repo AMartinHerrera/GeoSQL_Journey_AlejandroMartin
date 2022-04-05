@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <h1>QUERY RESULT:</h1>
+    </head>
+
+    <body>
+        {% if error_case %}
+            {{ error_case }}
+        {% endif %}
+
+        <div>
+            <div>
+                {{ query_result }}
+            </div>
+
+            <!-- <table>
+                    {% for q in query_result %}
+                    <tr>
+                        <th>{{ q }}</th>
+                    </tr>
+                    {% endfor %}
+                </table> -->
+
+            <div>
+                <a href="{% url 'input_query' %}">Run another geoSQL statement</a>
+            </div>
+
+        </div>
+
+    </body>
+
+</html>

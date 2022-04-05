@@ -1,0 +1,82 @@
+id,stop_name,commune_id,commune_name,x_coordinate,y_coordinate,mean_of_transport
+1,Äuli,3861,Fideris,0,0,(Zug)
+2,Aadorf,4551,Aadorf,710377,260736,Zug
+3,"Aadorf, Bahnhof",4551,Aadorf,710334,260768,Bus
+4,"Aadorf, Morgental",4551,Aadorf,70984,261377,Bus
+5,"Aadorf, Zentrum",4551,Aadorf,710078,261058,Bus
+6,"Aarau Rohr, Gemeindehaus",4001,Aarau,648785,250486,Bus
+7,"Aarau Rohr, Quellhölzli",4001,Aarau,648044,250143,Bus
+8,"Aarau Rohr, Rigistrasse",4001,Aarau,648459,250334,Bus
+9,"Aarau Rohr, Salamatt",4001,Aarau,647824,249937,Bus
+10,"Aarau Rohr, Unterdorf",4001,Aarau,64901,250605,Bus
+11,"Aarau, Aarenau",4001,Aarau,646085,250261,Bus
+12,"Aarau, Aarepark",4001,Aarau,6455,249676,Bus
+13,"Aarau, Achenbergstrasse",4001,Aarau,645906,250076,Bus
+14,"Aarau, Allmendweg",4001,Aarau,645228,249187,Bus
+15,"Aarau, Alte Badanstalt",4001,Aarau,644741,249567,Bus
+16,"Aarau, Bahnhof",4001,Aarau,646235,249184,Bus
+17,"Aarau, Bavaria",4001,Aarau,647232,248918,Bus
+18,"Aarau, Berufsschule",4001,Aarau,646535,249761,Bus
+19,"Aarau, Binzenhofstrasse",4001,Aarau,645923,247791,Bus
+20,"Aarau, Buchenhof",4001,Aarau,646216,248704,Bus
+21,"Aarau, Dammweg",4001,Aarau,644938,248513,Bus
+22,"Aarau, Delfterstrasse",4001,Aarau,64708,249958,Bus
+23,"Aarau, Dossenstrasse",4001,Aarau,646,247988,Bus
+24,"Aarau, Dufourstrasse",4001,Aarau,646354,248429,Bus
+25,"Aarau, Friedhof",4001,Aarau,64592,248823,Bus
+26,"Aarau, Gais",4001,Aarau,646775,24915,Bus
+27,"Aarau, General Guisanstrasse",4001,Aarau,64658,24769,Bus
+28,"Aarau, Hans Hässigstrasse",4001,Aarau,646158,24792,Bus
+29,"Aarau, Heinrich Wirristrasse",4001,Aarau,646461,248251,Bus
+30,"Aarau, Herzogplatz",4001,Aarau,646585,248687,Bus
+31,"Aarau, Hirslanden Klinik",4001,Aarau,645506,249091,Bus
+32,"Aarau, Holzmarkt",4001,Aarau,645821,24921,Bus
+33,"Aarau, Ifang",4001,Aarau,645311,248701,Bus
+34,"Aarau, Käfergrund",4001,Aarau,64634,247799,Bus
+35,"Aarau, Kasinopark",4001,Aarau,645922,249213,Bus
+36,"Aarau, Keba",4001,Aarau,646724,248038,Bus
+37,"Aarau, Kettenbrücke",4001,Aarau,645574,249511,Bus
+38,"Aarau, Kunsthaus",4001,Aarau,645876,249062,Bus
+39,"Aarau, Neumattstrasse",4001,Aarau,647314,250067,Bus
+40,"Aarau, Obere Vorstadt",4001,Aarau,645985,2489,Bus
+41,"Aarau, Pestalozzistrasse",4001,Aarau,645582,24863,Bus
+42,"Aarau, Post Kaufhaus",4001,Aarau,645716,249307,Bus
+43,"Aarau, Rathaus",4001,Aarau,64563,24942,Bus
+44,"Aarau, Roggenhausen",4001,Aarau,645167,24849,Bus
+45,"Aarau, Schanz",4001,Aarau,645573,24886,Bus
+46,"Aarau, Sonnmattweg",4001,Aarau,645636,249827,Bus
+47,"Aarau, Spital",4001,Aarau,646973,248693,Bus
+48,"Aarau, Tannerstrasse",4001,Aarau,645777,24834,Bus
+49,"Aarau, Tellizentrum",4001,Aarau,646838,249846,Bus
+50,"Aarau, Wallerplatz",4001,Aarau,645732,248099,Bus
+51,"Aarau, Wasserfluhweg",4001,Aarau,64608,247739,Bus
+52,"Aarau, Wöschnauring",4001,Aarau,644733,248433,Bus
+53,"Aarau, Zelglistrasse",4001,Aarau,645662,248473,Bus
+54,"Aarberg, Zuckerrüben",301,Aarberg,587592,209911,Bus
+55,"Aarberg, Aarezelg",301,Aarberg,587337,210997,Bus
+56,"Aarberg, Bernfeld",301,Aarberg,588289,210317,Bus
+57,"Aarberg, Bielstr/Friedhof",301,Aarberg,587194,210368,Bus
+58,"Aarberg, Bifang",301,Aarberg,588176,211114,Zug
+59,"Aarberg, Murtenstrasse",301,Aarberg,587395,21024,(Zug)
+60,"Aarberg, Nidaustrasse",301,Aarberg,587208,210641,(Zug)
+61,"Aarberg, Post/Bahnhof",301,Aarberg,587796,210397,Bus
+62,"Aarberg, Scheueracker",301,Aarberg,586919,210512,Bus
+63,"Aarberg, Schwimmbad",301,Aarberg,587564,209985,Bus
+64,"Aarberg, Spital",301,Aarberg,587924,210712,Bus
+65,"Aarburg-Oftringen, Bahnhof",4271,Aarburg,635472,241137,Bus
+66,"Aarburg, Alter Friedhof",4271,Aarburg,634922,241807,Bus
+67,"Aarburg, Höhe",4271,Aarburg,635202,242137,Bus
+68,"Aarburg, Kloosmatte",4271,Aarburg,635464,24299,Bus
+69,"Aarburg, Längacker",4271,Aarburg,635343,242575,Zug
+70,"Aarburg, Städtli",4271,Aarburg,634803,241312,Zug
+71,"Aarburg, Stadtgarten",4271,Aarburg,634837,241118,Bus
+72,"Aareschlucht, Ost",784,Aareschlucht,659469,173725,Zug
+73,"Aathal, Bahnhof",119,Aathal,700355,243598,Bus
+74,"Aawangen, Dorf",4551,Aawangen,71007,2634,Bus
+75,"Abtwil AG, Altchilen",4221,Abtwil,669517,224925,Bus
+76,"Abtwil AG, Auwerstrasse",4221,Abtwil,66944,22529,Bus
+77,"Abtwil AG, Hofmatt",4221,Abtwil,669525,225495,Bus
+78,"Abtwil AG, Langegg",4221,Abtwil,669705,226209,Bus
+79,"Abtwil AG, Post",4221,Abtwil,669491,225246,Bus
+80,"Abtwil SG, Ausserdorf",3442,Abtwil,741557,253868,Bus
+81,"Abtwil SG, Dorf",3442,Abtwil,741683,253997,Bus
