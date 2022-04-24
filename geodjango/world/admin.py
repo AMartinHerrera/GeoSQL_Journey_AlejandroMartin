@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import WorldBorder, Stops, QuartiersCada
+from .models import WorldBorder, Stops, QuartiersCada, SecteursCada, IlotsCada
 
 # Register your models here.
 
@@ -9,3 +9,5 @@ from .models import WorldBorder, Stops, QuartiersCada
 admin.site.register(WorldBorder)
 admin.site.register(Stops)
 admin.site.register(QuartiersCada)
+admin.site.register(SecteursCada)
+admin.site.register(IlotsCada)

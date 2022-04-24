@@ -64,3 +64,41 @@ class QuartiersCada(models.Model):
     def __str__(self):
         return f'{self.numquartie}, {self.nomquartie}'
 
+
+class SecteursCada(models.Model):
+    numsecteur = models.SmallIntegerField(blank=True)
+
+    nomsecteur = models.CharField(max_length=100)
+
+    geom = models.GeometryField()
+    # models.GeometryField(geography=False)
+
+    class Meta:
+        ordering = ['numsecteur']
+
+    def __str__(self):
+        return f'{self.numsecteur}, {self.nomsecteur}'
+
+
+class IlotsCada(models.Model):
+    idgothing = models.IntegerField(blank=True)
+
+    numilot = models.IntegerField(blank=True)
+
+    numsecteur = models.IntegerField(blank=True)
+
+    nomsecteur = models.CharField(max_length=100)
+
+    numquartie = models.IntegerField(blank=True)
+
+    nomquartie = models.CharField(max_length=100)
+
+    geom = models.GeometryField()
+    # models.GeometryField(geography=False)
+
+    class Meta:
+        ordering = ['idgothing']
+
+    def __str__(self):
+        return f'{self.idgothing}, {self.numilot}'
+

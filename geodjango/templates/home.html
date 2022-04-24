@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}
+    <title>Este es el index</title>
+{% endblock %}
+
+{% block content %}
+  <h1>GEOSQL Journey Home</h1>
+  <p>Welcome to GEOSQL Journey, a website developed by <em>Alejandro Martin</em>!</p>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+<!-- BACKUP INDEX.HTML  -->
+
+
+
+
+  <!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <title>Tiled WMS</title>
+    <link rel="stylesheet" href="https://openlayers.org/en/v4.6.5/css/ol.css" type="text/css">
+    <!-- The line below is only needed for old environments like Internet Explorer and Android 4.x -->
+    <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL"></script>
+    <script src="https://openlayers.org/en/v4.6.5/build/ol.js"></script>
+    <!-- <script src="/home/eps/Escritorio/GeoSQL_Journey_AlejandroMartin/geodjango/templates/ol.js"></script> -->
+    <style>
+      .map {
+        width: 100%;
+        height:400px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="map" class="map"></div>
+    {% load static %}
+    <!-- <script src="{% static 'main.js' %}"></script> -->
+    <!-- <script type="text/javascript"> -->
+    <script type="module">
+
+      import 'ol/ol.css';
+      import Map from 'ol/Map';
+      import View from 'ol/View';
+      import WKB from 'ol/format/WKB';
+      import {OSM, Vector as VectorSource} from 'ol/source';
+      import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer';
+
+      const raster = new TileLayer({
+        source: new OSM(),
+      });
+
+      const wkb =
+        '0103000000010000000500000054E3A59BC4602540643BDF4F8D1739C05C8FC2F5284C4140EC51B81E852B34C0D578E926316843406F1283C0CAD141C01B2FDD2406012B40A4703D0AD79343C054E3A59BC4602540643BDF4F8D1739C0';
+
+      const format = new WKB();
+
+      const feature = format.readFeature(wkb, {
+        dataProjection: 'EPSG:4326',
+        featureProjection: 'EPSG:3857',
+      });
+
+      const vector = new VectorLayer({
+        source: new VectorSource({
+          features: [feature],
+        }),
+      });
+
+      const map = new Map({
+        layers: [raster, vector],
+        target: 'map',
+        view: new View({
+          center: [2952104.0199, -3277504.823],
+          zoom: 4,
+        }),
+      });
+
+
+
+
+    </script>
+  </body>
+</html>
+</INDEX>
