@@ -33,7 +33,7 @@ def input_query(request):
         'form': form,
     }
 
-    return render(request, 'index.html', context)
+    return render(request, 'input_query.html', context)
 
 
 def output_query(request):
@@ -67,4 +67,4 @@ def output_query(request):
     }
     
 
-    return render(request, 'tiled.html', context)
+    return render(request, 'output_query.html', context)
