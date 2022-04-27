@@ -1,0 +1,46 @@
+.sidebar-nav {
+    margin-top: 20px;
+    padding: 0;
+    list-style: none;
+}
+
+tr {
+    display: table-row;
+    vertical-align: inherit;
+    border-color: inherit;
+}
+
+.table {
+    width: 100%;
+    margin-bottom: 1rem;
+    color: #212529;
+}
+
+body {
+  background-color: #F0E68C;
+}
+
+.book-list li{
+    list-style: none;
+    /* background-color: blueviolet; */
+    margin: 5px;
+}
+
+
+.create-formulario form{
+    width:3000px;
+	padding:16px;
+	border-radius:10px;
+	margin:auto;
+	background-color:rgb(251, 253, 140);
+}
+
+.create-contenedor{
+    content:none;
+}
+
+.input-redondeado{
+    /* border-radius: 20px; */
+    border-radius: 10px;
+    border: 1px solid #39c;
+}

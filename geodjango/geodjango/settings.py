@@ -125,18 +125,16 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR,'staticfiles')
+# STATIC_PATH = os.path.join(BASE_DIR,'static'),
+
 
 STATICFILES_DIRS = (
     # look for static files in a folder called static in our root folder, not just in our apps.
     os.path.join(BASE_DIR,'static'),
-    os.path.join(BASE_DIR,'world','static'),
+    # os.path.join(BASE_DIR,'world','static'),
 )
 
-# STATIC_PATH = BASE_DIR + '/static'
-
-# STATICFILES_DIRS = (
-#     STATIC_PATH,
-# )
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
