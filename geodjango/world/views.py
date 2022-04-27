@@ -16,7 +16,7 @@ def home(request):
     context = {}
 
     # Render the HTML template index.html with the data in the context variable
-    return render(request, 'home.html', context=context)
+    return render(request, 'base.html', context=context)
 
 
 def input_query(request):

@@ -1,14 +1,9 @@
 {% extends "base.html" %}
-{% load static %}
+{% block content %}
+
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <h1>Proof of concept:</h1>
-</head>
     <body>
-
-        {% block content %}
         <div class="create-contenedor">
             <div class="create-formu">
                 <h3>geoSQL Engine tool:</h3>
@@ -25,7 +20,7 @@
                 <input id="order" name="order" type="hidden" value="Your order has been successfully completed.">
             </div>
         </div>
-        {% endblock %}
 
     </body>
 </html>
+{% endblock %}

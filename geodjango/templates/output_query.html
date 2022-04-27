@@ -1,8 +1,8 @@
 {% extends "base.html" %}
-{% load static %}
+{% block content %}
+
 <!DOCTYPE html>
 <html lang="en">
-
     <head>
         <meta charset="utf-8">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.14.1/css/ol.css" type="text/css">
@@ -14,7 +14,7 @@
         </style>
         <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.14.1/build/ol.js"></script>
         <title>Query Result:</title>
-      </head>
+    </head>
 
     <body>
         {% if error_case %}
@@ -70,13 +70,11 @@
             
             </script>
 
-
             <div>
                 <a href="{% url 'input_query' %}">Run another geoSQL statement</a>
             </div>
 
         </div>
-
     </body>
-
 </html>
+{% endblock %}
