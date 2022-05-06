@@ -3,78 +3,82 @@
 
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.14.1/css/ol.css" type="text/css">
-        <style>
-          .map {
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.14.1/css/ol.css" type="text/css">
+    <style>
+        .map {
             height: 400px;
             width: 100%;
-          }
-        </style>
-        <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.14.1/build/ol.js"></script>
-        <title>Query Result:</title>
-    </head>
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.14.1/build/ol.js"></script>
+    <title>Query Result:</title>
+</head>
 
-    <body>
-        {% if error_case %}
-            {{ error_case }}
-        {% endif %}
+<body>
+    {% if error_case %}
+    {{ error_case }}
+    {% endif %}
 
+    <div>
         <div>
-            <div>
-                {{ query_result }}
-            </div>
+            {{ query_result }}
+        </div>
+        <input type="hidden" id="query_result" name="query_result" value="{{ query_result }}">
 
+
+        <h2>Query Map Result:</h2>
+        <div id="map" class="map"></div>
+        <!-- <script type="text/javascript"> -->
+        <script type="module">
+ 
+            const ex = document.getElementById("query_result").value;
+            // console.log(ex)
             
-            <h2>Query Map Result:</h2>
-            <div id="map" class="map"></div>
-            <!-- <script type="text/javascript"> -->
-            <script type="module">
 
-                const wkb =
-                    '0103000000010000000500000054E3A59BC4602540643BDF4F8D1739C05C8FC2F5284C4140EC51B81E852B34C0D578E926316843406F1283C0CAD141C01B2FDD2406012B40A4703D0AD79343C054E3A59BC4602540643BDF4F8D1739C0';
+            // const wkb =
+            //     '0103000000010000000500000054E3A59BC4602540643BDF4F8D1739C05C8FC2F5284C4140EC51B81E852B34C0D578E926316843406F1283C0CAD141C01B2FDD2406012B40A4703D0AD79343C054E3A59BC4602540643BDF4F8D1739C0';
 
-                const wkt =
-                    'POLYGON((10.689 -25.092, 34.595 ' +
-                    '-20.170, 38.814 -35.639, 13.502 ' +
-                    '-39.155, 10.689 -25.092))';
+            // const wkb_database =
+            //     '0106000020E610000001000000010300000001000000390000005108974D21771A406BFE9D41AA424740CB45298D2A771A40C53CCE8EA9424740E3D9798351771A40654A289FA642474066F5C00784771A40D7F13EC8A24247408411943A52781A40F6415424934247403CDF339353781A4050AF3507934247404108F8F262781A402AB0F7E591424740A064FA1B1E791A40D2652AB683424740428AB5179C791A40CD24555F79424740CEA18D09A2791A40E9BF5BDF784247404EE34721A2791A40922AA8C678424740C6D75A20A2791A406AEEDEAD78424740333FC806A2791A40C6DB2E95784247408466C0D4A1791A407E93C67C784247405ACCA18AA1791A40C92ED46478424740996EF828A1791A4039E8844D78424740F2C17CB0A0791A405BC60437784247408F551222A0791A4052487E21784247402E25C67E9F791A40F4151A0D78424740349DCCC79E791A40B3B2FEF97742474010547FFE9D791A40FA3450E8774247408A7D5A249D791A400D0230D877424740B11CFA3A9C791A40E88EBCC977424740A7F916449B791A40BC2611BD774247402E03175388791A404E84140577424740BD2E59A102791A40C91ACF15724247401DD618AFEF781A4048086268714247406CCC555BE9781A4012BF7CDF72424740CA517B74E6781A40C35CF96C7342474002E8478BE4781A405DE7A7AE734247404AB8BDDBDF781A4031BC9B227442474006279427DD781A40B01E7A5474424740413F12B69B781A409927A97278424740CD25818B80781A402C8328317A42474054A1D62F2D781A408EB4668A7F424740F623921E15781A404BF78A1581424740C143E3DFD3771A40630E63F784424740C260AFE7D1771A40BA2A2A6E854247408C44090AD3771A40A843AFBC8542474097D8AB1ED3771A40F539D5D585424740A66AFE7DD2771A406746EC268642474028659814D2771A40855A393C8642474051645118D4771A40037C56CE8642474068B3947DC9771A40FB8067C38742474081B3B651CA771A409827DE4088424740096F8F1C59771A407949910B90424740CF90F2D84D771A408FF557BF904247401E54C0D641771A40F582D45991424740A0F049533D771A404FB8468B91424740EF74156A29771A408BF8160594424740BA9F372625771A40EC49AC89944247406CD3893D23771A405FDF9EC8944247404CA43812F6761A409E6365909B4247400E612C0ABB761A4000E61CECA5424740C2EE100292761A40FC0A60FBAA42474075032B1C83761A40BD60E0AFAC4247405108974D21771A406BFE9D41AA424740'
 
-                const wkt_2 = 
-                    'POINT(536903.234837955 153407.682507042)'
 
-                const format = new ol.format.WKT();
+            const format = new ol.format.WKB();
 
-                const feature = format.readFeature(wkt, {
-                    dataProjection: 'EPSG:4326',
-                    featureProjection: 'EPSG:3857',
-                });
+            const feature = format.readFeature(ex, {
+                dataProjection: 'EPSG:4326',
+                featureProjection: 'EPSG:3857',
+            });
 
-                var map = new ol.Map({
-                    target: 'map',
-                    layers: [
+            var map = new ol.Map({
+                target: 'map',
+                layers: [
                     new ol.layer.Tile({
                         source: new ol.source.OSM()
                     }),
                     new ol.layer.Vector({
                         source: new ol.source.Vector({
-                        features: [feature],
+                            features: [feature],
                         })
                     })
-                    ],
-                    view: new ol.View({
-                    center: [2952104.0199, -3277504.823],
-                    zoom: 4
-                    })
-                });
-            
-            </script>
+                ],
+                view: new ol.View({
+                    // center: [2952104.0199, -3277504.823],
+                    center: [894418.387242583, 5919720.18983807],
+                    zoom: 8
+                })
+            });
+        </script>
 
-            <div>
-                <a href="{% url 'input_query' %}">Run another geoSQL statement</a>
-            </div>
-
+        <div>
+            <a href="{% url 'input_query' %}">Run another geoSQL statement</a>
         </div>
-    </body>
+
+    </div>
+</body>
+
 </html>
 {% endblock %}

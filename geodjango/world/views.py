@@ -5,6 +5,9 @@ from django.db.models import Q
 from .forms import QueryInputForm
 from django.db import connection
 import psycopg2
+import re
+import functools
+import operator
 
 
 # Create your views here.
@@ -46,7 +49,7 @@ def output_query(request):
     with connection.cursor() as cursor:
         try:
             cursor.execute(query)
-            query_result = cursor.fetchall()
+            query_result = cursor.fetchone()
         except (Exception, psycopg2.Error) as error:
             print("Error while fetching data from PostgreSQL", error) 
             error_case = "Error while fetching data from PostgreSQL"
@@ -61,8 +64,12 @@ def output_query(request):
     if query_result is "":
         error_case = "Error with the geoSQL query executed. Try again!"
 
+    query_result_parsed = ""
+    query_result_parsed = functools.reduce(operator.add, (query_result))
+    
+
     context = {
-        'query_result': query_result,
+        'query_result': query_result_parsed,
         'error_case': error_case
     }
     
