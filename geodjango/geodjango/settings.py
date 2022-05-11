@@ -84,7 +84,14 @@ DATABASES = {
         'HOST': 'localhost',
         'PASSWORD': 'postgres',
         'PORT': '5432',
-    }
+    },
+
+    # 'sample': {
+    #     'ENGINE': 'django.contrib.gis.db.backends.postgis',
+    #     'NAME': 'multi_schema_db',
+    #     'USER': 'sample_user',
+    #     'PASSWORD': 'postgres',
+    # },
 }
 
 

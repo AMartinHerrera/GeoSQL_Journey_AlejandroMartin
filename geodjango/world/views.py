@@ -10,8 +10,6 @@ import functools
 import operator
 
 
-# Create your views here.
-
 def home(request):
     """View function for home page of site."""
 
@@ -75,3 +73,57 @@ def output_query(request):
     
 
     return render(request, 'output_query.html', context)
+
+
+def new_schema(request):
+
+    raw = """
+        DO LANGUAGE plpgsql
+        $body$
+        DECLARE
+        old_schema NAME = 'public';
+        new_schema NAME = 'sample';
+        tbl TEXT;
+        sql TEXT;
+        BEGIN
+        EXECUTE format('CREATE SCHEMA IF NOT EXISTS %I', new_schema);
+
+        FOR tbl IN
+            SELECT table_name
+            FROM information_schema.tables
+            WHERE table_schema=old_schema
+        LOOP
+            sql := format(
+                    'CREATE TABLE IF NOT EXISTS %I.%I '
+                    '(LIKE %I.%I INCLUDING INDEXES INCLUDING CONSTRAINTS)'
+                    , new_schema, tbl, old_schema, tbl);
+
+            EXECUTE sql;
+
+            sql := format(
+                    'INSERT INTO %I.%I '
+                    'SELECT * FROM %I.%I'
+                    , new_schema, tbl, old_schema, tbl);
+
+            EXECUTE sql;
+        END LOOP;
+        END
+        $body$;
+        """
+
+
+    error_case = ""
+
+    with connection.cursor() as cursor:
+        try:
+            cursor.execute(raw)
+        except (Exception, psycopg2.Error) as error:
+            print("Error while fetching data from PostgreSQL", error) 
+            error_case = "Error while fetching data from PostgreSQL"
+
+        finally:
+            # closing database connection.
+            if connection:
+                cursor.close()
+                connection.close()
+                print("PostgreSQL connection is closed") 
