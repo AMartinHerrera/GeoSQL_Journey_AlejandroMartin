@@ -15,6 +15,12 @@
                     </div>
                     <input type="submit" value="Submit" style="height:25px; width: 75px;">
                 </form>
+                <form action="{% url 'delete_schema' %}" method="POST">
+                    {% csrf_token %}
+                    <div class="input" style="height:25px;">
+                        <input type="submit" value="Exit game" style="height:25px; width: 75px;">
+                    </div>                    
+                </form>
             </div>
             <div>
                 <input id="order" name="order" type="hidden" value="Your order has been successfully completed.">

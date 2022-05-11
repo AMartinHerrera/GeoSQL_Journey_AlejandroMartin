@@ -15,12 +15,12 @@ def home(request):
 
 
     context = {}
-
-    # Render the HTML template index.html with the data in the context variable
     return render(request, 'base.html', context=context)
 
 
 def input_query(request):
+
+    new_schema(request)
 
     if request.method == 'POST':
         form = QueryInputForm(request.POST)
@@ -118,8 +118,8 @@ def new_schema(request):
         try:
             cursor.execute(raw)
         except (Exception, psycopg2.Error) as error:
-            print("Error while fetching data from PostgreSQL", error) 
-            error_case = "Error while fetching data from PostgreSQL"
+            print("Error while creating new schema in the database", error) 
+            error_case = "Error while creating new schema in the database"
 
         finally:
             # closing database connection.
@@ -127,3 +127,28 @@ def new_schema(request):
                 cursor.close()
                 connection.close()
                 print("PostgreSQL connection is closed") 
+
+def delete_schema(request):
+
+    raw = """
+        DROP SCHEMA IF EXISTS sample CASCADE;
+        """
+
+    error_case = ""
+
+    with connection.cursor() as cursor:
+        try:
+            cursor.execute(raw)
+        except (Exception, psycopg2.Error) as error:
+            print("Error while creating new schema in the database", error) 
+            error_case = "Error while creating new schema in the database"
+
+        finally:
+            # closing database connection.
+            if connection:
+                cursor.close()
+                connection.close()
+                print("PostgreSQL connection is closed") 
+    
+    context = {}
+    return render(request, 'base.html', context=context)
