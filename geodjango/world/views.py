@@ -1,14 +1,19 @@
 from django.shortcuts import render
-from django.views import generic
-from .models import Stops
-from django.db.models import Q
 from .forms import QueryInputForm
 from django.db import connection
 import psycopg2
-import re
 import functools
 import operator
 
+global_var = -1
+
+def add_global_var():
+    global global_var
+    global_var = global_var + 1
+
+def sub_global_var():
+    global global_var
+    global_var = global_var - 1
 
 def home(request):
     """View function for home page of site."""
@@ -19,8 +24,6 @@ def home(request):
 
 
 def input_query(request):
-
-    new_schema(request)
 
     if request.method == 'POST':
         form = QueryInputForm(request.POST)
@@ -43,8 +46,18 @@ def output_query(request):
     query_result = ""
     error_case = ""
 
+    conn = psycopg2.connect(host="localhost", 
+                    port="5432", 
+                    user="postgres", 
+                    password="postgres", 
+                    database="geodjango", 
+                    options="-c search_path=dbo,user" + str(global_var))
 
-    with connection.cursor() as cursor:
+    conn.autocommit = True
+
+    # sql="""CREATE TABLE siiuuuu ( PersonID int, City varchar(255));"""
+    
+    with conn.cursor() as cursor:
         try:
             cursor.execute(query)
             query_result = cursor.fetchone()
@@ -54,35 +67,39 @@ def output_query(request):
 
         finally:
             # closing database connection.
-            if connection:
+            if conn:
                 cursor.close()
-                connection.close()
+                conn.commit()
+                conn.close()
                 print("PostgreSQL connection is closed")  
 
+    
+
     if query_result is "":
-        error_case = "Error with the geoSQL query executed. Try again!"
+        error_case = "The return of your query is empty!"
 
     query_result_parsed = ""
-    query_result_parsed = functools.reduce(operator.add, (query_result))
+    # query_result_parsed = functools.reduce(operator.add, (query_result))
     
 
     context = {
         'query_result': query_result_parsed,
         'error_case': error_case
     }
-    
 
     return render(request, 'output_query.html', context)
 
 
 def new_schema(request):
 
+    add_global_var()
+
     raw = """
         DO LANGUAGE plpgsql
         $body$
         DECLARE
         old_schema NAME = 'public';
-        new_schema NAME = 'sample';
+        new_schema NAME = 'user""" +str(global_var)+ """';
         tbl TEXT;
         sql TEXT;
         BEGIN
@@ -111,7 +128,6 @@ def new_schema(request):
         $body$;
         """
 
-
     error_case = ""
 
     with connection.cursor() as cursor:
@@ -128,10 +144,26 @@ def new_schema(request):
                 connection.close()
                 print("PostgreSQL connection is closed") 
 
+
+    if request.method == 'POST':
+        form = QueryInputForm(request.POST)
+        # if form.is_valid():
+        #     query = form.cleaned_data['query']
+
+    else:
+        form = QueryInputForm()
+
+    context = {
+        'form': form,
+    }
+
+    return render(request, 'input_query.html', context)
+
+
 def delete_schema(request):
 
     raw = """
-        DROP SCHEMA IF EXISTS sample CASCADE;
+        DROP SCHEMA IF EXISTS user"""+str(global_var)+""" CASCADE;
         """
 
     error_case = ""
@@ -151,4 +183,5 @@ def delete_schema(request):
                 print("PostgreSQL connection is closed") 
     
     context = {}
+    sub_global_var()
     return render(request, 'base.html', context=context)
