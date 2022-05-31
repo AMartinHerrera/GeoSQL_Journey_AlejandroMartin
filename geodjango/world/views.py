@@ -338,6 +338,7 @@ def delete_schema(request):
                 connection.close()
                 print("PostgreSQL connection is closed") 
     
+    
     context = {}
     sub_global_var()
     return render(request, 'base.html', context=context)
