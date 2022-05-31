@@ -4,8 +4,11 @@ from django.db import connection
 import psycopg2
 import functools
 import operator
+from tkinter import *
+import tkinter.messagebox
 
-global_var = -1
+
+global_var = 0
 
 def add_global_var():
     global global_var
@@ -17,7 +20,6 @@ def sub_global_var():
 
 def home(request):
     """View function for home page of site."""
-
 
     context = {}
     return render(request, 'base.html', context=context)
@@ -44,14 +46,23 @@ def output_query(request):
 
     query = request.POST['query']
     query_result = ""
+    query_result_parsed = ""
     error_case = ""
+    flag=0
+
+    # conn = psycopg2.connect(host="localhost", 
+    #                 port="5432", 
+    #                 user="postgres", 
+    #                 password="postgres", 
+    #                 database="geodjango", 
+    #                 options="-c search_path=dbo,user" + str(global_var))
 
     conn = psycopg2.connect(host="localhost", 
                     port="5432", 
                     user="postgres", 
                     password="postgres", 
                     database="geodjango", 
-                    options="-c search_path=dbo,user" + str(global_var))
+                    options="-c search_path=dbo,public")
 
     conn.autocommit = True
 
@@ -63,8 +74,9 @@ def output_query(request):
             query_result = cursor.fetchone()
         except (Exception, psycopg2.Error) as error:
             print("Error while fetching data from PostgreSQL", error) 
-            error_case = "Error while fetching data from PostgreSQL"
-
+            error_case = error
+            alert_popup("Error!", error_case)
+            flag = 1
         finally:
             # closing database connection.
             if conn:
@@ -73,15 +85,21 @@ def output_query(request):
                 conn.close()
                 print("PostgreSQL connection is closed")  
 
+    if flag == 1:
+        if request.method == 'POST':
+            form = QueryInputForm(request.POST)
+        else:
+            form = QueryInputForm()
+
+        context = {'form': form,}
+        return render(request, 'input_query.html', context)
+
+    else:
+        query_result_parsed = functools.reduce(operator.add, (query_result))
+
+    # if query_result is "":
+    #     error_case = "The return of your query is empty!"
     
-
-    if query_result is "":
-        error_case = "The return of your query is empty!"
-
-    query_result_parsed = ""
-    # query_result_parsed = functools.reduce(operator.add, (query_result))
-    
-
     context = {
         'query_result': query_result_parsed,
         'error_case': error_case
@@ -89,6 +107,24 @@ def output_query(request):
 
     return render(request, 'output_query.html', context)
 
+def alert_popup(title, message):
+    """Generate a pop-up window for special messages."""
+    root = Tk()
+    root.title(title)
+    w = 700     # popup window width
+    h = 200     # popup window height
+    sw = root.winfo_screenwidth()
+    sh = root.winfo_screenheight()
+    x = (sw - w)/2
+    y = (sh - h)/2
+    root.geometry('%dx%d+%d+%d' % (w, h, x, y))
+    m = message
+    # m += '\n'
+    w = Label(root, text=m, width=120, height=10)
+    w.pack()
+    b = Button(root, text="Try again!", command=root.destroy, width=10)
+    b.pack()
+    mainloop()
 
 def new_schema(request):
 
