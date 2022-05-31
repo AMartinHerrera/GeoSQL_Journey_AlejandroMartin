@@ -25,7 +25,7 @@ def home(request):
     return render(request, 'base.html', context=context)
 
 
-def input_query(request):
+def first_stage_input_query(request):
 
     if request.method == 'POST':
         form = QueryInputForm(request.POST)
@@ -39,10 +39,10 @@ def input_query(request):
         'form': form,
     }
 
-    return render(request, 'input_query.html', context)
+    return render(request, 'first_stage_input_query.html', context)
 
 
-def output_query(request):
+def first_stage_output_query(request):
 
     query = request.POST['query']
     query_result = ""
@@ -75,7 +75,93 @@ def output_query(request):
         except (Exception, psycopg2.Error) as error:
             print("Error while fetching data from PostgreSQL", error) 
             error_case = error
-            alert_popup("Error!", error_case)
+            error_alert_popup("Error!", error_case)
+            flag = 1
+        finally:
+            # closing database connection.
+            if conn:
+                cursor.close()
+                conn.commit()
+                conn.close()
+                print("PostgreSQL connection is closed")  
+
+    if flag == 1:
+        if request.method == 'POST':
+            form = QueryInputForm(request.POST)
+        else:
+            form = QueryInputForm()
+        context = {'form': form,}
+        return render(request, 'first_stage_input_query.html', context)
+
+    else:
+        query_result_parsed = functools.reduce(operator.add, (query_result))
+        if query_result_parsed == 802951.361475021:
+            success_alert_popup("Message", "Correct! Well done!!")
+        else:
+            message = "The area obtained '" + str(query_result_parsed) + "' is not the expected."
+            error_alert_popup("Error!", message)
+            if request.method == 'POST':
+                form = QueryInputForm(request.POST)
+            else:
+                form = QueryInputForm()
+            context = {'form': form,}
+            return render(request, 'first_stage_input_query.html', context)
+
+    context = {
+        'query_result': query_result_parsed,
+        'error_case': error_case
+    }
+
+    return render(request, 'first_stage_output_query.html', context)
+
+
+def second_stage_input_query(request):
+
+    if request.method == 'POST':
+        form = QueryInputForm(request.POST)
+
+    else:
+        form = QueryInputForm()
+
+    context = {'form': form,}
+
+    return render(request, 'second_stage_input_query.html', context)
+
+
+def second_stage_output_query(request):
+
+    query = request.POST['query']
+    query_result = ""
+    query_result_parsed = ""
+    error_case = ""
+    flag=0
+
+    # conn = psycopg2.connect(host="localhost", 
+    #                 port="5432", 
+    #                 user="postgres", 
+    #                 password="postgres", 
+    #                 database="geodjango", 
+    #                 options="-c search_path=dbo,user" + str(global_var))
+
+    conn = psycopg2.connect(host="localhost", 
+                    port="5432", 
+                    user="postgres", 
+                    password="postgres", 
+                    database="geodjango", 
+                    options="-c search_path=dbo,public")
+
+    conn.autocommit = True
+
+    # sql="""CREATE TABLE siiuuuu ( PersonID int, City varchar(255));"""
+    
+    with conn.cursor() as cursor:
+        try:
+            cursor.execute(query)
+            query_result = cursor.fetchone()
+        except (Exception, psycopg2.Error) as error:
+            print("Error while fetching data from PostgreSQL", error) 
+            error_case = error
+            error_alert_popup("Error!", error_case)
             flag = 1
         finally:
             # closing database connection.
@@ -92,22 +178,36 @@ def output_query(request):
             form = QueryInputForm()
 
         context = {'form': form,}
-        return render(request, 'input_query.html', context)
+        return render(request, 'second_stage_input_query.html', context)
 
     else:
         query_result_parsed = functools.reduce(operator.add, (query_result))
+        if query_result_parsed == "0101000000F64453F514632041459A0653969A0241":
+            success_alert_popup("Message", "Correct! Well done!!")
+        else:
+            message = "The geometry field obtained '" + str(query_result_parsed) + "' is not the expected."
+            error_alert_popup("Error!", message)
+            if request.method == 'POST':
+                form = QueryInputForm(request.POST)
+            else:
+                form = QueryInputForm()
+            context = {'form': form,}
+            return render(request, 'second_stage_input_query.html', context)
 
-    # if query_result is "":
-    #     error_case = "The return of your query is empty!"
+
+
+    
     
     context = {
         'query_result': query_result_parsed,
         'error_case': error_case
     }
 
-    return render(request, 'output_query.html', context)
+    return render(request, 'second_stage_output_query.html', context)
 
-def alert_popup(title, message):
+
+
+def error_alert_popup(title, message):
     """Generate a pop-up window for special messages."""
     root = Tk()
     root.title(title)
@@ -123,6 +223,26 @@ def alert_popup(title, message):
     w = Label(root, text=m, width=120, height=10)
     w.pack()
     b = Button(root, text="Try again!", command=root.destroy, width=10)
+    b.pack()
+    mainloop()
+
+
+def success_alert_popup(title, message):
+    """Generate a pop-up window for special messages."""
+    root = Tk()
+    root.title(title)
+    w = 700     # popup window width
+    h = 200     # popup window height
+    sw = root.winfo_screenwidth()
+    sh = root.winfo_screenheight()
+    x = (sw - w)/2
+    y = (sh - h)/2
+    root.geometry('%dx%d+%d+%d' % (w, h, x, y))
+    m = message
+    # m += '\n'
+    w = Label(root, text=m, width=120, height=10)
+    w.pack()
+    b = Button(root, text="OK!", command=root.destroy, width=10)
     b.pack()
     mainloop()
 
@@ -193,7 +313,7 @@ def new_schema(request):
         'form': form,
     }
 
-    return render(request, 'input_query.html', context)
+    return render(request, 'first_stage_input_query.html', context)
 
 
 def delete_schema(request):

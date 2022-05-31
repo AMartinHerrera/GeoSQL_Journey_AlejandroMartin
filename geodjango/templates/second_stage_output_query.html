@@ -24,13 +24,9 @@
     {% endif %}
 
     <div>
-        <!-- <div>
-            {{ query_result }}
-        </div> -->
         <input type="hidden" id="query_result" name="query_result" value="{{ query_result }}">
 
-
-        <h2>Query Map Result:</h2>
+        <h3>Congratulations! Correct query result:</h3>
         <div id="map" class="map"></div>
         <!-- <script type="text/javascript"> -->
         <script type="module">
@@ -73,7 +69,7 @@
         </script>
 
         <div>
-            <a href="{% url 'input_query' %}">Run another geoSQL statement</a>
+            <a href="{% url 'delete_schema' %}">Go back to home page</a>
         </div>
 
     </div>

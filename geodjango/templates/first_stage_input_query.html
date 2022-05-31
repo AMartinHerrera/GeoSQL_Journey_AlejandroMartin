@@ -6,9 +6,11 @@
     <body>
         <div class="container">
             <div class="create-formu">
-                <h3>geoSQL Engine tool:</h3>
-                <form action="{% url 'output_query' %}" method="POST">
+                <h2>First stage:</h2>
+                <h3>Objective:</h3>
+                <h5>You should run a command that returns the area of the second numquartie from the quartiers_cada table, as a numerical value</h5>
 
+                <form action="{% url 'first_stage_output_query' %}" method="POST">
                     {% csrf_token %}
                     <div class="input" style="height:25px;">
                         {{ form }}
@@ -23,7 +25,7 @@
                 </form>
             </div>
             <div>
-                <input id="order" name="order" type="hidden" value="Your order has been successfully completed.">
+                <input id="order" name="order" type="hidden" value="Successfully completed.">
             </div>
         </div>
 
