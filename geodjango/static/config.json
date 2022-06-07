@@ -1,0 +1,22 @@
+{
+    "app_info": [
+        {
+            "stage": "1", 
+            "description": "You should run a command that returns the area of the second numquartie from the quartiers_cada table, as a numerical value",
+            "hint": "Try with the 'st_area' function",
+            "solution": "802951.361475021"
+        },
+        {
+            "stage": "2", 
+            "description": "You should run a command that returns the centroid of the ilot 82857 from the ilotscada table, as a geographical result",
+            "hint": "Try with the 'st_centroid' function",
+            "solution": "0101000000F64453F514632041459A0653969A0241"
+        },
+        {
+            "stage": "3", 
+            "description": "Description3",
+            "hint": "hint3",
+            "solution": "solution3"
+        }
+    ]
+}

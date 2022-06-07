@@ -6,9 +6,25 @@ import functools
 import operator
 from tkinter import *
 import tkinter.messagebox
+import json
+import os
+import requests
 
 
 global_var = 0
+global_context_request = 0
+
+def add_global_context_request():
+    global global_context_request
+    global_context_request = global_context_request + 1
+
+def sub_global_context_request():
+    global global_context_request
+    global_context_request = global_context_request - 1
+
+def reset_global_context_request():
+    global global_context_request
+    global_context_request = 0
 
 def add_global_var():
     global global_var
@@ -25,29 +41,45 @@ def home(request):
     return render(request, 'base.html', context=context)
 
 
-def first_stage_input_query(request):
+def input_query(request):
+
+    add_global_context_request()
 
     if request.method == 'POST':
         form = QueryInputForm(request.POST)
-        # if form.is_valid():
-        #     query = form.cleaned_data['query']
 
     else:
         form = QueryInputForm()
+
+    f = open('static/config.json')
+    data = json.load(f)
+
+    for i in data['app_info']:
+        if i['stage'] == str(global_context_request):
+            stage = i['stage']
+            description = i['description']
+
+    f.close()
 
     context = {
         'form': form,
+        'stage': stage,
+        'description': description,
     }
 
-    return render(request, 'first_stage_input_query.html', context)
+    return render(request, 'input_query.html', context)
 
 
-def first_stage_output_query(request):
+def output_query(request):
+
+    print("STage")
+    print(global_context_request)
 
     query = request.POST['query']
     query_result = ""
     query_result_parsed = ""
     error_case = ""
+    solution=""
     flag=0
 
     # conn = psycopg2.connect(host="localhost", 
@@ -66,8 +98,6 @@ def first_stage_output_query(request):
 
     conn.autocommit = True
 
-    # sql="""CREATE TABLE siiuuuu ( PersonID int, City varchar(255));"""
-    
     with conn.cursor() as cursor:
         try:
             cursor.execute(query)
@@ -85,126 +115,91 @@ def first_stage_output_query(request):
                 conn.close()
                 print("PostgreSQL connection is closed")  
 
-    if flag == 1:
-        if request.method == 'POST':
-            form = QueryInputForm(request.POST)
-        else:
-            form = QueryInputForm()
-        context = {'form': form,}
-        return render(request, 'first_stage_input_query.html', context)
+    f = open('static/config.json')
+    data = json.load(f)
 
-    else:
-        query_result_parsed = functools.reduce(operator.add, (query_result))
-        if query_result_parsed == 802951.361475021:
-            success_alert_popup("Message", "Correct! Well done!!")
-        else:
-            message = "The area obtained '" + str(query_result_parsed) + "' is not the expected."
-            error_alert_popup("Error!", message)
-            if request.method == 'POST':
-                form = QueryInputForm(request.POST)
-            else:
-                form = QueryInputForm()
-            context = {'form': form,}
-            return render(request, 'first_stage_input_query.html', context)
+    for i in data['app_info']:
+        if i['stage'] == str(global_context_request):
+            stage = i['stage']
+            description = i['description']
+            solution = i['solution']
 
-    context = {
-        'query_result': query_result_parsed,
-        'error_case': error_case
-    }
+    f.close()
 
-    return render(request, 'first_stage_output_query.html', context)
-
-
-def second_stage_input_query(request):
-
-    if request.method == 'POST':
-        form = QueryInputForm(request.POST)
-
-    else:
-        form = QueryInputForm()
-
-    context = {'form': form,}
-
-    return render(request, 'second_stage_input_query.html', context)
-
-
-def second_stage_output_query(request):
-
-    query = request.POST['query']
-    query_result = ""
-    query_result_parsed = ""
-    error_case = ""
-    flag=0
-
-    # conn = psycopg2.connect(host="localhost", 
-    #                 port="5432", 
-    #                 user="postgres", 
-    #                 password="postgres", 
-    #                 database="geodjango", 
-    #                 options="-c search_path=dbo,user" + str(global_var))
-
-    conn = psycopg2.connect(host="localhost", 
-                    port="5432", 
-                    user="postgres", 
-                    password="postgres", 
-                    database="geodjango", 
-                    options="-c search_path=dbo,public")
-
-    conn.autocommit = True
-
-    # sql="""CREATE TABLE siiuuuu ( PersonID int, City varchar(255));"""
     
-    with conn.cursor() as cursor:
-        try:
-            cursor.execute(query)
-            query_result = cursor.fetchone()
-        except (Exception, psycopg2.Error) as error:
-            print("Error while fetching data from PostgreSQL", error) 
-            error_case = error
-            error_alert_popup("Error!", error_case)
-            flag = 1
-        finally:
-            # closing database connection.
-            if conn:
-                cursor.close()
-                conn.commit()
-                conn.close()
-                print("PostgreSQL connection is closed")  
+
 
     if flag == 1:
         if request.method == 'POST':
             form = QueryInputForm(request.POST)
         else:
             form = QueryInputForm()
-
-        context = {'form': form,}
-        return render(request, 'second_stage_input_query.html', context)
+        context = {
+            'form': form,
+            'stage': stage,
+            'description': description,
+        }
+        return render(request, 'input_query.html', context)
 
     else:
         query_result_parsed = functools.reduce(operator.add, (query_result))
-        if query_result_parsed == "0101000000F64453F514632041459A0653969A0241":
+        print("STAGEEE")
+        print(global_context_request)
+        print("Soluutioooon")
+        print(type(solution))
+        print("Soluutioooon2222")
+        print(type(query_result_parsed))
+        if str(query_result_parsed) == solution:
             success_alert_popup("Message", "Correct! Well done!!")
         else:
-            message = "The geometry field obtained '" + str(query_result_parsed) + "' is not the expected."
+            message = "The result obtained '" + str(query_result_parsed) + "' is not the expected."
             error_alert_popup("Error!", message)
             if request.method == 'POST':
                 form = QueryInputForm(request.POST)
             else:
                 form = QueryInputForm()
-            context = {'form': form,}
-            return render(request, 'second_stage_input_query.html', context)
+            context = {
+                'form': form,
+                'stage': stage,
+                'description': description,
+            }
+            return render(request, 'input_query.html', context)
 
-
-
-    
-    
     context = {
         'query_result': query_result_parsed,
         'error_case': error_case
     }
 
-    return render(request, 'second_stage_output_query.html', context)
+    return render(request, 'output_query.html', context)
 
+
+def show_hint(request):
+
+    form = QueryInputForm()
+
+    f = open('static/config.json')
+    data = json.load(f)
+
+    for i in data['app_info']:
+        if i['stage'] == str(global_context_request):
+            stage = i['stage']
+            description = i['description']
+            hint = i['hint']
+
+    f.close()
+
+    success_alert_popup("Message", hint)
+
+    next_page="output_query"
+
+    context = {
+        'form': form,
+        'stage': stage,
+        'description': description,
+        'next_page': next_page
+    }
+
+    return render(request, 'input_query.html', context)
 
 
 def error_alert_popup(title, message):
@@ -248,6 +243,7 @@ def success_alert_popup(title, message):
 
 def new_schema(request):
 
+    add_global_context_request()
     add_global_var()
 
     raw = """
@@ -303,17 +299,28 @@ def new_schema(request):
 
     if request.method == 'POST':
         form = QueryInputForm(request.POST)
-        # if form.is_valid():
-        #     query = form.cleaned_data['query']
 
     else:
         form = QueryInputForm()
 
+    f = open('static/config.json')
+    data = json.load(f)
+
+    for i in data['app_info']:
+        if i['stage'] == str(global_context_request):
+            stage = i['stage']
+            description = i['description']
+
+
+    f.close()
+    
     context = {
         'form': form,
+        'stage': stage,
+        'description': description
     }
 
-    return render(request, 'first_stage_input_query.html', context)
+    return render(request, 'input_query.html', context)
 
 
 def delete_schema(request):
@@ -338,7 +345,8 @@ def delete_schema(request):
                 connection.close()
                 print("PostgreSQL connection is closed") 
     
-    
+
     context = {}
     sub_global_var()
+    reset_global_context_request()
     return render(request, 'base.html', context=context)
