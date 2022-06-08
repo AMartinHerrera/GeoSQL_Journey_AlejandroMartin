@@ -43,7 +43,8 @@ def home(request):
 
 def input_query(request):
 
-    add_global_context_request()
+    description=""
+    stage=""
 
     if request.method == 'POST':
         form = QueryInputForm(request.POST)
@@ -72,14 +73,13 @@ def input_query(request):
 
 def output_query(request):
 
-    print("STage")
-    print(global_context_request)
-
     query = request.POST['query']
     query_result = ""
     query_result_parsed = ""
     error_case = ""
     solution=""
+    description=""
+    stage=""
     flag=0
 
     # conn = psycopg2.connect(host="localhost", 
@@ -143,13 +143,8 @@ def output_query(request):
 
     else:
         query_result_parsed = functools.reduce(operator.add, (query_result))
-        print("STAGEEE")
-        print(global_context_request)
-        print("Soluutioooon")
-        print(type(solution))
-        print("Soluutioooon2222")
-        print(type(query_result_parsed))
         if str(query_result_parsed) == solution:
+            add_global_context_request()
             success_alert_popup("Message", "Correct! Well done!!")
         else:
             message = "The result obtained '" + str(query_result_parsed) + "' is not the expected."
