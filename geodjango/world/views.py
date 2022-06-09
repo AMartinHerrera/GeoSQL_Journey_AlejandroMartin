@@ -1,3 +1,6 @@
+
+# This file is where all the functions that need to be executed are defined
+
 from django.shortcuts import render
 from .forms import QueryInputForm
 from django.db import connection
@@ -10,9 +13,11 @@ import json
 import os
 import requests
 
-
+# Here are defined the global variables for the management of the context and users schemas
 global_var = 0
 global_context_request = 0
+
+#Functions to add, substract, and reset the global variables:
 
 def add_global_context_request():
     global global_context_request
@@ -26,32 +31,36 @@ def reset_global_context_request():
     global global_context_request
     global_context_request = 0
 
-def add_global_var():
+def add_global_user_var():
     global global_var
     global_var = global_var + 1
 
-def sub_global_var():
+def sub_global_user_var():
     global global_var
     global_var = global_var - 1
 
+# This home function just redirects to base.html template, the main template 
 def home(request):
     """View function for home page of site."""
 
+    # Create an empty context and render the template with it
     context = {}
     return render(request, 'base.html', context=context)
 
-
+# The purpose of this function is to render the input.html template with the information that reads from the config.json file
 def input_query(request):
 
     description=""
     stage=""
 
+    # Request with the form created to insert the query
     if request.method == 'POST':
         form = QueryInputForm(request.POST)
 
     else:
         form = QueryInputForm()
 
+    #read the information fromt he config.json file
     f = open('static/config.json')
     data = json.load(f)
 
@@ -62,6 +71,7 @@ def input_query(request):
 
     f.close()
 
+    # Create the context with the information and render the template with it
     context = {
         'form': form,
         'stage': stage,
@@ -70,7 +80,10 @@ def input_query(request):
 
     return render(request, 'input_query.html', context)
 
-
+# This function do the same as the input_query, but now using the result of the query obtained
+# It access to the user schema, and checks if different errors are happening while running the statements, 
+# if those errors occur, the system will inform the user using pop-ups
+# if not, it compare the result obtained with the one expected, and then render the ouput_query template with all the context information
 def output_query(request):
 
     query = request.POST['query']
@@ -98,6 +111,7 @@ def output_query(request):
 
     conn.autocommit = True
 
+    # executing the query in the database
     with conn.cursor() as cursor:
         try:
             cursor.execute(query)
@@ -115,6 +129,7 @@ def output_query(request):
                 conn.close()
                 print("PostgreSQL connection is closed")  
 
+    #read the information fromt he config.json file
     f = open('static/config.json')
     data = json.load(f)
 
@@ -126,14 +141,14 @@ def output_query(request):
 
     f.close()
 
-    
-
-
+    # In case the query result obtained have errors
     if flag == 1:
         if request.method == 'POST':
             form = QueryInputForm(request.POST)
         else:
             form = QueryInputForm()
+
+        # Create the context with the information and render the template with it
         context = {
             'form': form,
             'stage': stage,
@@ -141,6 +156,7 @@ def output_query(request):
         }
         return render(request, 'input_query.html', context)
 
+    # No error case situation 
     else:
         query_result_parsed = functools.reduce(operator.add, (query_result))
         if str(query_result_parsed) == solution:
@@ -153,6 +169,8 @@ def output_query(request):
                 form = QueryInputForm(request.POST)
             else:
                 form = QueryInputForm()
+
+            # Create the context with the information and render the template with it
             context = {
                 'form': form,
                 'stage': stage,
@@ -160,6 +178,7 @@ def output_query(request):
             }
             return render(request, 'input_query.html', context)
 
+    # Create the context with the information and render the template with it
     context = {
         'query_result': query_result_parsed,
         'error_case': error_case
@@ -167,11 +186,12 @@ def output_query(request):
 
     return render(request, 'output_query.html', context)
 
-
+# This function is the one that shows a message with the hint that reads from the config.file for each stage
 def show_hint(request):
 
     form = QueryInputForm()
 
+    #read the information fromt he config.json file
     f = open('static/config.json')
     data = json.load(f)
 
@@ -183,20 +203,19 @@ def show_hint(request):
 
     f.close()
 
+    # Show the message with a pop-up
     success_alert_popup("Message", hint)
 
-    next_page="output_query"
-
+    # Create the context with the information and render the template with it
     context = {
         'form': form,
         'stage': stage,
         'description': description,
-        'next_page': next_page
     }
 
     return render(request, 'input_query.html', context)
 
-
+# Pop-up function for the errors
 def error_alert_popup(title, message):
     """Generate a pop-up window for special messages."""
     root = Tk()
@@ -216,7 +235,7 @@ def error_alert_popup(title, message):
     b.pack()
     mainloop()
 
-
+# Pop-up function for the succesful messages
 def success_alert_popup(title, message):
     """Generate a pop-up window for special messages."""
     root = Tk()
@@ -236,11 +255,14 @@ def success_alert_popup(title, message):
     b.pack()
     mainloop()
 
+# Function that creates a new schema of a new user that start a new game
 def new_schema(request):
 
+    # adding one to the global variables, context_request and
     add_global_context_request()
-    add_global_var()
+    add_global_user_var()
 
+    #query to execute with the determined user
     raw = """
         DO LANGUAGE plpgsql
         $body$
@@ -275,14 +297,12 @@ def new_schema(request):
         $body$;
         """
 
-    error_case = ""
-
+    # executing the query in the database
     with connection.cursor() as cursor:
         try:
             cursor.execute(raw)
         except (Exception, psycopg2.Error) as error:
             print("Error while creating new schema in the database", error) 
-            error_case = "Error while creating new schema in the database"
 
         finally:
             # closing database connection.
@@ -291,13 +311,14 @@ def new_schema(request):
                 connection.close()
                 print("PostgreSQL connection is closed") 
 
-
+    # Create the request with the form
     if request.method == 'POST':
         form = QueryInputForm(request.POST)
 
     else:
         form = QueryInputForm()
 
+    #read the information fromt he config.json file
     f = open('static/config.json')
     data = json.load(f)
 
@@ -309,6 +330,7 @@ def new_schema(request):
 
     f.close()
     
+    # Create the context with the information and render the template with it
     context = {
         'form': form,
         'stage': stage,
@@ -317,21 +339,20 @@ def new_schema(request):
 
     return render(request, 'input_query.html', context)
 
-
+#Function that deletes the schema of the user that exit the game
 def delete_schema(request):
 
+    # query to execute
     raw = """
         DROP SCHEMA IF EXISTS user"""+str(global_var)+""" CASCADE;
         """
 
-    error_case = ""
-
+    # executing the query in the database
     with connection.cursor() as cursor:
         try:
             cursor.execute(raw)
         except (Exception, psycopg2.Error) as error:
             print("Error while creating new schema in the database", error) 
-            error_case = "Error while creating new schema in the database"
 
         finally:
             # closing database connection.
@@ -340,8 +361,8 @@ def delete_schema(request):
                 connection.close()
                 print("PostgreSQL connection is closed") 
     
-
+    # substract one to the global user variable and reset the stage global variable
     context = {}
-    sub_global_var()
+    sub_global_user_var()
     reset_global_context_request()
     return render(request, 'base.html', context=context)

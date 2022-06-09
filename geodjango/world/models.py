@@ -1,5 +1,7 @@
-from django.db import models
 
+# In this file are included the models detailed of the tables from the database
+
+from django.db import models
 from django.contrib.gis.db import models
 
 class WorldBorder(models.Model):
@@ -24,11 +26,6 @@ class WorldBorder(models.Model):
     def __str__(self):
         return self.name
 
-    # def __unicode__(self):
-    #     return self.name
-
-    # class Meta:
-    #     ordering = ['name']
 
 class Stops(models.Model):
 
